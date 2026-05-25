@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ControlsPanel } from './components/ControlsPanel';
 import { ExportPanel } from './components/ExportPanel';
-import type { ExportFormat, Scale } from './types';
+import type { ExportFormat, Scale, BadgeSize } from './types';
 import { getExportSnippet, stripHash } from './utils';
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -18,7 +18,10 @@ export default function CustomizePage(): ReactElement {
   const [textHex, setTextHex] = useState('');
   const [scale, setScale] = useState<Scale>('linear');
   const [speed, setSpeed] = useState('8s');
+  const [year, setYear] = useState('');
   const [radius, setRadius] = useState(8);
+  const [size, setSize] = useState<BadgeSize>('medium');
+  const [font, setFont] = useState('');
   const [exportFormat, setExportFormat] = useState<ExportFormat>('markdown');
   const [copied, setCopied] = useState(false);
   const trimmedUsername = username.trim();
@@ -62,8 +65,10 @@ export default function CustomizePage(): ReactElement {
 
     if (scale !== 'linear') params.set('scale', scale);
     if (speed !== '8s') params.set('speed', speed);
+    if (year) params.set('year', year);
     if (radius !== 8) params.set('radius', radius.toString());
-
+    if (size !== 'medium') params.set('size', size);
+    if (font !== '') params.set('font', font);
     return params.toString();
   }, [
     hasUsername,
@@ -75,7 +80,10 @@ export default function CustomizePage(): ReactElement {
     textHex,
     scale,
     speed,
+    year,
     radius,
+    size,
+    font,
   ]);
 
   const queryString = buildQueryParams();
@@ -170,7 +178,10 @@ export default function CustomizePage(): ReactElement {
               textHex={textHex}
               scale={scale}
               speed={speed}
+              year={year}
               radius={radius}
+              size={size}
+              font={font}
               onUsernameChange={setUsername}
               onThemeChange={handleThemeChange}
               onBgHexChange={setBgHex}
@@ -178,7 +189,10 @@ export default function CustomizePage(): ReactElement {
               onTextHexChange={setTextHex}
               onScaleChange={setScale}
               onSpeedChange={setSpeed}
+              onYearChange={setYear}
               onRadiusChange={setRadius}
+              onSizeChange={setSize}
+              onFontChange={setFont}
               onClearOverrides={() => {
                 setBgHex('');
                 setAccentHex('');
